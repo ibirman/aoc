@@ -4,86 +4,86 @@ let w2='L996,D167,R633,D49,L319,D985,L504,U273,L330,U904,R741,U886,L719,D73,L570
 //let w1='R75,D30,R83,U83,L12,D49,R71,U7,L72'.split(',');
 //let w2='U62,R66,U55,R34,D71,R55,D58,R83'.split(',');
 
-let g=[[]];
-let coords = [];
-let min = 0;
-let moves = 0;
+let g = {};
+g.graph = [[]];
+g.min = 0;
+g.moves = 0;
+g.x = 0;
+g.y = 0;
+g.coords = [];
 
-let x = 0;
-let y = 0;
+runWire(w1);
+runWire2(w2);
 
-wire1(w1);
-wire2(w2);
-
-function wire1(w) {
-    x = 10000;
-    y = 10000;
+function runWire(w) {
+    g.x = 10000;
+    g.y = 10000;
     w.forEach(v => move(v))
 }
 
-function wire2(w) {
-    x = 10000;
-    y = 10000;
-    moves = 0;
+function runWire2(w) {
+    g.x = 10000;
+    g.y = 10000;
+    g.moves = 0;
     w.forEach(v => check(v))
 }
 
 function move(action) {
     let d = action[0];
     let l = action.substr(1)*1;
-    let i=x;
-    let j=y;
+    let i=g.x;
+    let j=g.y;
 
-    if (g[y] == undefined) g[y] = [];
+    if (g[g.y] == undefined) g.g[g.y] = [];
 
-    if (d=='R') for (i=x;i>x-l;i--) g[y][i]=moves++;
-    if (d=='L') for (i=x;i<x+l;i++) g[y][i]=moves++;
-    if (d=='U') for (j=y;j>y-l;j--) {
-        if (g[j] == undefined) g[j] = [];
-        g[j][x]=moves++;
+    if (d=='R') for (i=g.x;i>g.x-l;i--) g.g[g.y][i]=moves++;
+    if (d=='L') for (i=g.x;i<g.x+l;i++) g.g[g.y][i]=moves++;
+    if (d=='U') for (j=g.y;j>g.y-l;j--) {
+        if (g.g[j] == undefined) g.g[j] = [];
+        g.g[j][g.x]=moves++;
     }
-    if (d=='D') for (j=y;j<y+l;j++) {
-        if (g[j] == undefined) g[j] = [];
-        g[j][x]=moves++;
+    if (d=='D') for (j=g.y;j<g.y+l;j++) {
+        if (g.g[j] == undefined) g.g[j] = [];
+        g.g[j][g.x]=moves++;
     }
 
-    x=i;
-    y=j;
+    g.x=i;
+    g.y=j;
 }
 
 function check(action) {
     let d = action[0];
     let l = action.substr(1)*1;
-    let i=x;
-    let j=y;
+    let i=g.x;
+    let j=g.y;
     let moves=0;
 
-    if (g[y] == undefined) g[y] = [];
+    if (g.g[g.y] == undefined) g.g[g.y] = [];
 
-    if (d=='R') for (i=x;i>x-l;i--) cross(i,y);
-    if (d=='L') for (i=x;i<x+l;i++) cross(i,y);
-    if (d=='U') for (j=y;j>y-l;j--) cross(x,j);
-    if (d=='D') for (j=y;j<y+l;j++) cross(x,j);
+    if (d=='R') for (i=g.x;i>g.x-l;i--) cross(i,g.y);
+    if (d=='L') for (i=g.x;i<g.x+l;i++) cross(i,g.y);
+    if (d=='U') for (j=g.y;j>g.y-l;j--) cross(g.x,j);
+    if (d=='D') for (j=g.y;j<g.y+l;j++) cross(g.x,j);
 
-    x=i;
-    y=j;
+    g.x=i;
+    g.y=j;
 }
 
 function cross(u,v) {
-    let g1 = g[v] == undefined?0:g[v][u];
-    let tm = g1+moves;
+    let g1 = g.g[v] == undefined?0:g.g[v][u];
+    let tm = g1+g.moves;
 
     if (g1>0) {
-        coords.push([u-10000,v-10000,tm]);
+        g.coords.push([u-10000,v-10000,tm]);
 
-        if (min == 0) min = tm;
+        if (g.min == 0) g.min = tm;
         else {
-            if (tm > 0 && tm < min) {
-                min = tm;
+            if (tm > 0 && tm < g.min) {
+                g.min = tm;
             }
         }
     }
-    moves++;
+    g.moves++;
 }
 
-console.log(coords,min);
+console.log(g.coords, g.min);
