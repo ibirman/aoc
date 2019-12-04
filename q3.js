@@ -9,18 +9,26 @@ let coords = [];
 let min = 0;
 let moves = 0;
 
-wire1(w1, 10000, 10000);
-wire2(w2, 10000, 10000);
+let x = 0;
+let y = 0;
 
-function wire1(w, x, y) {
-    w.forEach(v => move(v, x, y))
+wire1(w1);
+wire2(w2);
+
+function wire1(w) {
+    x = 10000;
+    y = 10000;
+    w.forEach(v => move(v))
 }
 
-function wire2(w, x, y) {
-    w.forEach(v => check(v, x, y))
+function wire2(w) {
+    x = 10000;
+    y = 10000;
+    moves = 0;
+    w.forEach(v => check(v))
 }
 
-function move(action, x, y) {
+function move(action) {
     let d = action[0];
     let l = action.substr(1)*1;
     let i=x;
@@ -43,7 +51,7 @@ function move(action, x, y) {
     y=j;
 }
 
-function check(action, x, y) {
+function check(action) {
     let d = action[0];
     let l = action.substr(1)*1;
     let i=x;
@@ -61,12 +69,12 @@ function check(action, x, y) {
     y=j;
 }
 
-function cross(x,y) {
-    let g1 = g[y] == undefined?0:g[y][x];
+function cross(u,v) {
+    let g1 = g[v] == undefined?0:g[v][u];
     let tm = g1+moves;
 
-    if (g1 > 0 && g[y][x]>0) {
-        coords.push([x-10000,y-10000,tm]);
+    if (g1>0) {
+        coords.push([u-10000,v-10000,tm]);
 
         if (min == 0) min = tm;
         else {
@@ -78,4 +86,4 @@ function cross(x,y) {
     moves++;
 }
 
-console.log(coords);
+console.log(coords,min);
