@@ -7,24 +7,20 @@ let w2='L996,D167,R633,D49,L319,D985,L504,U273,L330,U904,R741,U886,L719,D73,L570
 let g=[[]];
 let coords = [];
 let min = 0;
+let moves = 0;
 
-let x=10000;
-let y=10000;
+wire1(w1, 10000, 10000);
+wire2(w2, 10000, 10000);
 
+function wire1(w, x, y) {
+    w.forEach(v => move(v, x, y))
+}
 
-w1.forEach(v => {
-    move(v,1)
-});
+function wire2(w, x, y) {
+    w.forEach(v => check(v, x, y))
+}
 
-x=10000;
-y=10000;
-
-w2.forEach(v => {
-    check(v)
-});
-
-
-function move(action) {
+function move(action, x, y) {
     let d = action[0];
     let l = action.substr(1)*1;
     let i=x;
@@ -32,26 +28,27 @@ function move(action) {
 
     if (g[y] == undefined) g[y] = [];
 
-    if (d=='R') for (i=x;i>x-l;i--) g[y][i]=1;
-    if (d=='L') for (i=x;i<x+l;i++) g[y][i]=1;
+    if (d=='R') for (i=x;i>x-l;i--) g[y][i]=moves++;
+    if (d=='L') for (i=x;i<x+l;i++) g[y][i]=moves++;
     if (d=='U') for (j=y;j>y-l;j--) {
         if (g[j] == undefined) g[j] = [];
-        g[j][x]=1;
+        g[j][x]=moves++;
     }
     if (d=='D') for (j=y;j<y+l;j++) {
         if (g[j] == undefined) g[j] = [];
-        g[j][x]=1;
+        g[j][x]=moves++;
     }
 
     x=i;
     y=j;
 }
 
-function check(action) {
+function check(action, x, y) {
     let d = action[0];
     let l = action.substr(1)*1;
     let i=x;
     let j=y;
+    let moves=0;
 
     if (g[y] == undefined) g[y] = [];
 
@@ -65,18 +62,20 @@ function check(action) {
 }
 
 function cross(x,y) {
-    let md = Math.abs(x-10000)+Math.abs(y-10000);
+    let g1 = g[y] == undefined?0:g[y][x];
+    let tm = g1+moves;
 
-    if (g[y] != undefined && g[y][x] == 1) {
-        coords.push([x-10000,y-10000,md]);
+    if (g1 > 0 && g[y][x]>0) {
+        coords.push([x-10000,y-10000,tm]);
 
-        if (min == 0) min = md;
+        if (min == 0) min = tm;
         else {
-            if (md > 0 && md < min) {
-                min = md;
+            if (tm > 0 && tm < min) {
+                min = tm;
             }
         }
     }
+    moves++;
 }
 
-console.log(coords, min);
+console.log(coords);
