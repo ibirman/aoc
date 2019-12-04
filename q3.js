@@ -34,17 +34,20 @@ function move(action) {
     let i=g.x;
     let j=g.y;
 
-    if (g[g.y] == undefined) g.g[g.y] = [];
+    if (g.graph[g.y] == undefined) g.graph[g.y] = [];
 
-    if (d=='R') for (i=g.x;i>g.x-l;i--) g.g[g.y][i]=moves++;
-    if (d=='L') for (i=g.x;i<g.x+l;i++) g.g[g.y][i]=moves++;
+    if (d=='R') for (i=g.x;i>g.x-l;i--) g.graph[g.y][i]=g.moves++;
+
+    if (d=='L') for (i=g.x;i<g.x+l;i++) g.graph[g.y][i]=g.moves++;
+
     if (d=='U') for (j=g.y;j>g.y-l;j--) {
-        if (g.g[j] == undefined) g.g[j] = [];
-        g.g[j][g.x]=moves++;
+        if (g.graph[j] == undefined) g.graph[j] = [];
+        g.graph[j][g.x]=g.moves++;
     }
+
     if (d=='D') for (j=g.y;j<g.y+l;j++) {
-        if (g.g[j] == undefined) g.g[j] = [];
-        g.g[j][g.x]=moves++;
+        if (g.graph[j] == undefined) g.graph[j] = [];
+        g.graph[j][g.x]=g.moves++;
     }
 
     g.x=i;
@@ -58,7 +61,7 @@ function check(action) {
     let j=g.y;
     let moves=0;
 
-    if (g.g[g.y] == undefined) g.g[g.y] = [];
+    if (g.graph[g.y] == undefined) g.graph[g.y] = [];
 
     if (d=='R') for (i=g.x;i>g.x-l;i--) cross(i,g.y);
     if (d=='L') for (i=g.x;i<g.x+l;i++) cross(i,g.y);
@@ -70,7 +73,7 @@ function check(action) {
 }
 
 function cross(u,v) {
-    let g1 = g.g[v] == undefined?0:g.g[v][u];
+    let g1 = g.graph[v] == undefined?0:g.graph[v][u];
     let tm = g1+g.moves;
 
     if (g1>0) {
