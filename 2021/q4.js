@@ -4,7 +4,6 @@ fs.readFile('q4.txt', function(err, data) {
     if(err) throw err;
 
     const arr = data.toString().replace(/\r\n/g,'\n').split('\n');
-    //console.log(`Data length: ${arr.length}`);
 
     let numbers=arr[0].split(',');
     let boards=[]
@@ -16,7 +15,6 @@ fs.readFile('q4.txt', function(err, data) {
             row=0;
             continue;
         }
-        //console.log(i,(i-2)%5,arr[i]);
 
         if (row==0) {
             b++;
@@ -28,7 +26,7 @@ fs.readFile('q4.txt', function(err, data) {
         boards[b].marks.push([' ',' ',' ',' ',' ']);
     }
 
-    console.log(part1(numbers, boards));
+    part1(numbers, boards);
 
 });
 
@@ -57,8 +55,9 @@ function part1(numbers, boards) {
 
             if (checkForBingo(board)) {
                 bingo=true;
+                board.bingo=true;
                 boards[j].bingo=true;
-                console.log(`Bingo board: ${board.board}, number: ${n}, score: ${calculateScore(board,n)}`);
+                console.log(`Round: ${i} Bingo board: ${board.board}, number: ${n}, score: ${calculateScore(board,n)}`);
             }
 
         };
@@ -68,8 +67,6 @@ function part1(numbers, boards) {
 }
 
 function checkForBingo(board) {
-    bingo=false;
-
     // check across
     board.marks.forEach((mr,i) => {
         let rowMarkCount=0;
@@ -79,7 +76,7 @@ function checkForBingo(board) {
             }
         });
         if (rowMarkCount==5) {
-            bingo=true;
+            board.bingo=true;
         }
     })
 
@@ -91,15 +88,17 @@ function checkForBingo(board) {
         });
 
         if (markCount==5) {
-            bingo=true;
+            board.bingo=true;
         }
     }
 
     // check diagonals
     //if (board.marks[0][0] == '*' && board.marks[1][1] == '*' && board.marks[2][2] == '*' && board.marks[3][3] == '*' && board.marks[4][4]=='*') bingo=true;
     //if (board.marks[4][0] == '*' && board.marks[3][1] == '*' && board.marks[2][2] == '*' && board.marks[1][3] == '*' && board.marks[0][4]=='*') bingo=true;
+    
+    //console.log(board);
 
-    return bingo;
+    return board.bingo;
 }
 
 function calculateScore(board, lastNumber) {

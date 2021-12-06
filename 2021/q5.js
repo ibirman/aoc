@@ -55,9 +55,6 @@ fs.readFile('q5.txt', function(err, data) {
     console.log(`Lines overlap at ${overlap} points`);
 });
 
-function part1(numbers, boards) {
-}
-
 function parseInput(data) {
     const arr = data.toString().replace(/\r\n/g,'\n').split('\n');
     let lines = [];
