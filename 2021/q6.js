@@ -41,7 +41,7 @@ function process(part, data, days) {
 
     let totalFish = gen.reduce((p,g) => p+g);
 
-    console.log(`Part ${part} total: ${totalFish}`);
+    console.log(`Total lanterfish: ${totalFish}`);
 }
 
 function parseInput(data) {
