@@ -9,10 +9,7 @@ const file = argv._[0] ?? 'q8sample.txt';
 fs.readFile(file, function(err, input) {
     if(err) throw err;
 
-    const data = parseInput(input);
-    console.log(data);
-
-    process(data);
+    process(parseInput(input));
 });
 
 function process(data) {
@@ -95,9 +92,7 @@ function decodeInputs(inputs) {
 }
 
 function decodeOutputs(segment) {
-    let output='';
-
-    segment.Outputs.forEach(o => {
+    return segment.Outputs.reduce((t,o) => {
         let digit='';
         Object.keys(segment.Digits).forEach(k => {
             let d = segment.Digits[k];
@@ -106,13 +101,11 @@ function decodeOutputs(segment) {
             }
         });
         
-        output += digit;
-    });
-
-    return output;
+        return t + digit;
+    }, '');
 }
 
-function findUnmatchedChars(string1, string2) {
+const findUnmatchedChars = (string1, string2) => {
     for (i=0;i<string2.length;i++) {
         string1 = string1.replace(string2.substr(i,1),'');
     }
@@ -120,6 +113,4 @@ function findUnmatchedChars(string1, string2) {
     return string1;
 }
 
-function setDigit(o) {
-    return o.split('').sort().join('');
-}
+const setDigit = o => o.split('').sort().join('');
