@@ -47,6 +47,7 @@ function process(data) {
         }
 
         let dots=0;
+
         data.Graph.forEach(row => {
             row.forEach(c => {
                 if (c == '#') dots++;
@@ -66,6 +67,14 @@ function parseInput(data) {
 
     let maxY = 0;
     let maxX = 0;
+
+    arr.filter(a => a.substr(0,4) == 'fold').forEach(a => {
+        let f=a.split(' ')[2].split('=');
+        results.Folds.push({Axis: f[0], Value: f[1], Dots: 0});
+    });
+
+    maxX=results.Folds[0].Value*2;
+    maxY=results.Folds[1].Value*2;
 
     arr.filter(a => a != '' && a.substr(0,3) != 'fold').forEach(a => {
         let xy = a.split(',');
@@ -91,11 +100,8 @@ function parseInput(data) {
             }
         }
     }
-    arr.filter(a => a.substr(0,4) == 'fold').forEach(a => {
-        let f=a.split(' ')[2].split('=');
-        results.Folds.push({Axis: f[0], Value: f[1], Dots: 0});
-    });
 
+    console.log(maxY, maxX)
     return results;
 }
 
@@ -110,6 +116,8 @@ function logGraph(data) {
         });
         console.log(line);
     })
+
+    console.log(data.Graph.length, data.Graph[0].length)
 
     console.log(`There are ${dots} dots`);
     console.log(data.Folds);
