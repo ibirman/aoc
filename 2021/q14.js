@@ -1,6 +1,7 @@
 const fs = require('fs');
 const yargs = require('yargs');
 const argv = yargs.argv;
+const _ = require('underscore');
 
 console.log(argv);
 
@@ -15,40 +16,20 @@ fs.readFile(file, function(err, input) {
 
 function process(data, count) {
     let template = data.PolymerTemplate;
+    data.Pairs = [];
 
-    for (let i=0;i<count;i++) {
-        template = step(template, data);
-        data.Steps.push(template);
+    for (let i=0;i<template.length-1;i++) {
+        data.Pairs.push({Pair: template.substr(i,2), Count: 1})
     }
 
-    let commonElements={};
-
-    for (let i=0;i<data.Steps[count-1].length;i++) {
-        let el=data.Steps[count-1].substr(i,1);
-        if (commonElements[el] == null) {
-            commonElements[el]=1;
-        }
-        else {
-            commonElements[el]++;
-        }
-    }
-
-    data.CommonElements=commonElements;
+    console.log(data.Pairs);
 
     let most=0;
     let least=0;
 
-    Object.keys(data.CommonElements).forEach(key => {
-        if (data.CommonElements[key] > most) {
-            most = data.CommonElements[key];
-        }
-        if (data.CommonElements[key] < least || least == 0) {
-            least = data.CommonElements[key];
-        }
-    })
+    console.log(most - least)
 
     console.log(data);
-    console.log(most - least)
 
 }
 
@@ -76,6 +57,7 @@ function parseInput(data) {
 
     results.Rules=[];
     results.Steps=[];
+    results.CommonElements=[];
 
     arr.filter((a,i) => i>1).forEach(a => {
         let e=a.split(' -> ')
