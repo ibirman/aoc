@@ -16,13 +16,20 @@ fs.readFile(file, function(err, input) {
 
 function process(data, count) {
     let template = data.PolymerTemplate;
-    data.Pairs = [];
+    data.Pairs = {}
 
     for (let i=0;i<template.length-1;i++) {
-        data.Pairs.push({Pair: template.substr(i,2), Count: 1})
+        data.Pairs[template.substr(i,2)] = 1;
     }
 
     console.log(data.Pairs);
+
+    for (let j=0;j<count;j++) {
+        workPairs = data.Pairs;
+        Object.keys(workPairs).forEach(key => {
+            let e = data.Rules[key].Element;
+        })
+    }
 
     let most=0;
     let least=0;
@@ -55,13 +62,13 @@ function parseInput(data) {
     let results = {};
     results.PolymerTemplate = arr[0];
 
-    results.Rules=[];
+    results.Rules={}
     results.Steps=[];
     results.CommonElements=[];
 
     arr.filter((a,i) => i>1).forEach(a => {
         let e=a.split(' -> ')
-        results.Rules.push({Pair: e[0], Element: e[1]});
+        results.Rules[e[0]] = e[1];
     });
     return results;
 }
