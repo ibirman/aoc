@@ -22,13 +22,23 @@ function process(data, count) {
         data.Pairs[template.substr(i,2)] = 1;
     }
 
-    console.log(data.Pairs);
+    data.Steps.push(getLength(data.Pairs));
 
-    for (let j=0;j<count;j++) {
+    for (let step=0;step<count;step++) {
         workPairs = data.Pairs;
+        data.Pairs={};
+        //console.log(workPairs);
         Object.keys(workPairs).forEach(key => {
-            let e = data.Rules[key].Element;
+            let e = data.Rules[key];
+            addPair(data, key.substr(0,1)+e, workPairs[key]);
+            addPair(data, e+key.substr(1,1), workPairs[key]);
         })
+
+        let length = getLength(data.Pairs);
+
+        console.log(`After step ${step} length is ${length}`);
+        //console.log(data.Pairs)
+        data.Steps.push(length);
     }
 
     let most=0;
@@ -40,21 +50,18 @@ function process(data, count) {
 
 }
 
-function step(template, data) {
-    let polymer = template.substr(0,1); 
-    for (let i=0;i<template.length-1;i++) {
-        let pair = template.substr(i,2);
-        let rules = data.Rules.filter(r => r.Pair == pair);
+function getLength(pairs) {
+    return Object.keys(pairs).reduce((t,key) => t+=pairs[key],0)*2 - 1;
+}
 
-        if (rules.length==1) {
-            polymer += rules[0].Element+pair.substr(1,1);
-        }
-        else {
-            polymer += pair;
-        }
+function addPair(data, pair, count) {
+    //console.log('Add', pair, count)
+    if (data.Pairs[pair] == undefined) {
+        data.Pairs[pair]=1;
     }
-
-    return polymer;
+    else {
+        data.Pairs[pair]+=count*1;
+    }
 }
 
 function parseInput(data) {
