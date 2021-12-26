@@ -24,10 +24,10 @@ function process(data, count) {
 
     data.Steps.push(getLength(data.Pairs));
 
-    for (let step=0;step<count;step++) {
+    for (let step=1;step<=count;step++) {
         workPairs = data.Pairs;
         data.Pairs={};
-        //console.log(workPairs);
+
         Object.keys(workPairs).forEach(key => {
             let e = data.Rules[key];
             addPair(data, key.substr(0,1)+e, workPairs[key]);
@@ -37,30 +37,47 @@ function process(data, count) {
         let length = getLength(data.Pairs);
 
         console.log(`After step ${step} length is ${length}`);
-        //console.log(data.Pairs)
+        console.log(data.Pairs);
         data.Steps.push(length);
     }
 
-    let most=0;
-    let least=0;
-
-    console.log(most - least)
-
-    console.log(data);
+    countMaxMin(data, data.Pairs);
 
 }
 
 function getLength(pairs) {
-    return Object.keys(pairs).reduce((t,key) => t+=pairs[key],0)*2 - 1;
+    return Object.keys(pairs).reduce((t,key) => t+=pairs[key],0) + 1;
 }
 
 function addPair(data, pair, count) {
-    //console.log('Add', pair, count)
     if (data.Pairs[pair] == undefined) {
-        data.Pairs[pair]=1;
+        data.Pairs[pair]=count;
     }
     else {
         data.Pairs[pair]+=count*1;
+    }
+}
+
+function countMaxMin(data,pairs) {
+    let letters={};
+    Object.keys(pairs).forEach(key => {
+        addLetter(letters,key.substr(0,1),pairs[key]);
+    });
+
+    addLetter(letters,data.PolymerTemplate.substr(data.PolymerTemplate.length-1,1),1);
+
+    console.log(letters);
+    let sorted = Object.keys(letters).sort((a,b) => letters[a]-letters[b]);
+    let total = letters[sorted[sorted.length-1]]-letters[sorted[0]];
+    console.log(`Max minus min = ${letters[sorted[sorted.length-1]]} - ${letters[sorted[0]]} = ${total}`);
+}
+
+function addLetter(letters, letter, count) {
+    if (letters[letter]==undefined) {
+        letters[letter]=count;
+    }
+    else {
+        letters[letter]+=count;
     }
 }
 
