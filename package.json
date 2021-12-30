@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "astar": "0.0.1",
+    "big-integer": "^1.6.51",
     "line-reader": "^0.4.0",
     "node-fetch": ">=2.6.1",
     "underscore": "^1.13.2",

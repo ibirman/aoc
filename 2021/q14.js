@@ -2,6 +2,7 @@ const fs = require('fs');
 const yargs = require('yargs');
 const argv = yargs.argv;
 const _ = require('underscore');
+var bigInt = require("big-integer");
 
 console.log(argv);
 
@@ -37,7 +38,7 @@ function process(data, count) {
         let length = getLength(data.Pairs);
 
         console.log(`After step ${step} length is ${length}`);
-        console.log(data.Pairs);
+        //console.log(data.Pairs);
         data.Steps.push(length);
     }
 
