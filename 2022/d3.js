@@ -3,7 +3,6 @@ const yargs = require('yargs');
 const argv = yargs.argv;
 const _ = require('underscore');
 const { map } = require('underscore');
-const weight = ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 console.log(argv);
 
@@ -62,7 +61,7 @@ function part2(data) {
     })
 
     groups.forEach(g => {
-        weight.substring(1).split('').forEach(w => {
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(w => {
             let count = 0;
             data.filter(bag => bag.group == g.id).forEach(b => {
                 if (searchBag(b, w)) {
@@ -72,7 +71,7 @@ function part2(data) {
 
             if (count == 3) {
                 g.badge = w;
-                g.priority = weight.indexOf(w);
+                g.priority = getWeight(w);
             }
         });
     });
@@ -84,6 +83,10 @@ function part2(data) {
 
 function searchBag(bag, itemType) {
     return bag.compartment1.findIndex(c => c.type == itemType) > -1 || bag.compartment2.findIndex(c => c.type == itemType) > -1;
+}
+
+function getWeight(itemType) {
+    return ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.indexOf(itemType);
 }
 
 function parseInput(data) {
@@ -110,7 +113,7 @@ function parseCompartment(data) {
     const compartment = [];
 
     for (const element of data) {
-        compartment.push({type:element,priority:weight.indexOf(element)})
+        compartment.push({type:element,priority:getWeight(element)})
     }
 
     return compartment;
