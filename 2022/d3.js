@@ -41,23 +41,77 @@ function part1(data) {
 
 function part2(data) {
     console.log(`Processing Part 2`)
+    let total = 0;
+    const groups = [];
+
+    data.forEach((bag, bi) => {
+        bag.matches = [];
+        bag.badge = null;
+        if (groups.length < bag.group) {
+            groups.push({id:bag.group});
+        }
+        bag.compartment1.forEach(c1 => {
+            if (bag.compartment2.findIndex(c2 => c2.type == c1.type) >= 0) {
+                if (bag.matches.findIndex(m => m.type == c1.type) == -1) {
+                    console.log(`Matching type for bag ${bi} is ${c1.type} priority ${c1.priority}`);
+                    bag.matches.push(c1)
+                    total += c1.priority;
+                }
+            }
+        })
+    })
+
+    groups.forEach(g => {
+        weight.substring(1).split('').forEach(w => {
+            let count = 0;
+            data.filter(bag => bag.group == g.id).forEach(b => {
+                if (searchBag(b, w)) {
+                    count++;
+                }
+            });
+
+            if (count == 3) {
+                g.badge = w;
+                g.priority = weight.indexOf(w);
+            }
+        });
+    });
+
+    console.log(groups);
+    console.log(groups.reduce((total, g) => total + g.priority, 0));
+
+}
+
+function searchBag(bag, itemType) {
+    return bag.compartment1.findIndex(c => c.type == itemType) > -1 || bag.compartment2.findIndex(c => c.type == itemType) > -1;
 }
 
 function parseInput(data) {
     const arr = data.toString().replace(/\r\n/g,'\n').split('\n');
 
     const bags = [];
-    arr.forEach(line => {
-        const compartment1 = [];
-        for (let i=0;i<line.length/2;i++) {
-            compartment1.push({type:line[i],priority:weight.indexOf(line[i])})
+    let group = 1;
+
+    arr.forEach((line,li) => {
+        if (li>0 && li%3==0) {
+            group++;
         }
-        const compartment2 = [];
-        for (let i=line.length/2;i<line.length;i++) {
-            compartment2.push({type:line[i],priority:weight.indexOf(line[i])})
-        }
-        bags.push({compartment1, compartment2})
+        bags.push({
+            group,
+            compartment1: parseCompartment(line.substring(0,line.length/2)), 
+            compartment2: parseCompartment(line.substring(line.length/2))
+        });
     });
 
     return bags;
+}
+
+function parseCompartment(data) {
+    const compartment = [];
+
+    for (const element of data) {
+        compartment.push({type:element,priority:weight.indexOf(element)})
+    }
+
+    return compartment;
 }
