@@ -1,0 +1,5 @@
+C:\vbrick\Igor\AOC2021\AOC2021\obj\Debug\net5.0\AOC2021.csproj.AssemblyReference.cache
+C:\vbrick\Igor\AOC2021\AOC2021\obj\Debug\net5.0\AOC2021.GeneratedMSBuildEditorConfig.editorconfig
+C:\vbrick\Igor\AOC2021\AOC2021\obj\Debug\net5.0\AOC2021.AssemblyInfoInputs.cache
+C:\vbrick\Igor\AOC2021\AOC2021\obj\Debug\net5.0\AOC2021.AssemblyInfo.cs
+C:\vbrick\Igor\AOC2021\AOC2021\obj\Debug\net5.0\AOC2021.csproj.CoreCompileInputs.cache
