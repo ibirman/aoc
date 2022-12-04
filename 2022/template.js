@@ -6,8 +6,10 @@ const { map } = require('underscore');
 
 console.log(argv);
 
-const file = argv._[0] ?? 'sample.txt';
+const defaultDataFile = argv.$0.replace(/\.js$/,'.txt')
+const file = argv._[0] ?? defaultDataFile;
 const data = argv._[1] ?? '';
+
 
 fs.readFile(file, function(err, input) {
     if(err) throw err;
@@ -31,8 +33,11 @@ function parseInput(input) {
     const arr = input.toString().replace(/\r\n/g,'\n').split('\n');
 
     const data = [];
+
     arr.forEach((line,i) => {
-        data.push({line, index:i})
+        if (!(i == arr.length - 1 && line == '')) {
+            data.push({line, index:i})
+        }   
     });
 
     return data;

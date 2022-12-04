@@ -13,7 +13,7 @@ fs.readFile(file, function(err, input) {
     if(err) throw err;
 
     let data = parseInput(input);
-    console.log(JSON.stringify(data, null, 2));
+    //console.log(JSON.stringify(data, null, 2));
     part1(data);
 
     part2(data);
@@ -27,7 +27,7 @@ function part1(data) {
         bag.compartment1.forEach(c1 => {
             if (bag.compartment2.findIndex(c2 => c2.type == c1.type) >= 0) {
                 if (bag.matches.findIndex(m => m.type == c1.type) == -1) {
-                    console.log(`Matching type for bag ${bi} is ${c1.type} priority ${c1.priority}`);
+                    //console.log(`Matching type for bag ${bi} is ${c1.type} priority ${c1.priority}`);
                     bag.matches.push(c1)
                     total += c1.priority;
                 }
@@ -52,7 +52,7 @@ function part2(data) {
         bag.compartment1.forEach(c1 => {
             if (bag.compartment2.findIndex(c2 => c2.type == c1.type) >= 0) {
                 if (bag.matches.findIndex(m => m.type == c1.type) == -1) {
-                    console.log(`Matching type for bag ${bi} is ${c1.type} priority ${c1.priority}`);
+                    //console.log(`Matching type for bag ${bi} is ${c1.type} priority ${c1.priority}`);
                     bag.matches.push(c1)
                     total += c1.priority;
                 }
@@ -76,8 +76,8 @@ function part2(data) {
         });
     });
 
-    console.log(groups);
-    console.log(groups.reduce((total, g) => total + g.priority, 0));
+    //console.log(groups);
+    console.log(`Total priority of group badges is ${groups.reduce((total, g) => total + g.priority, 0)}`);
 
 }
 
