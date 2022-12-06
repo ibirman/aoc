@@ -24,35 +24,29 @@ fs.readFile(file, function(err, input) {
 function part1(data) {
     console.log(`Processing Part 1`)
     data.forEach(seg => {
-        let line = seg.line;
-        let marker = '';
-        let markerPosition=-1;
-        line.split('').map((c,i) => {
-            if (markerPosition == -1 && i>2 && checkUnique(line.substring(i-3,i+1))) {
-                markerPosition = i+1;
-                marker = line.substring(i-3,i+1);
-            }
-        })
-
-        console.log(`marker ${marker} position is ${markerPosition}`)
-    })
+        findMarker(seg.line, 4);
+    });
 }
 
 function part2(data) {
     console.log(`Processing Part 2`)
     data.forEach(seg => {
-        let line = seg.line;
-        let marker = '';
-        let markerPosition=-1;
-        line.split('').map((c,i) => {
-            if (markerPosition == -1 && i>2 && checkUnique(line.substring(i-13,i+1))) {
-                markerPosition = i+1;
-                marker = line.substring(i-13,i+1);
-            }
-        })
-
-        console.log(`marker ${marker} position is ${markerPosition}`)
+        findMarker(seg.line, 14);
     })
+}
+
+function findMarker(line, markerLength) {
+    let marker = '';
+    let markerPosition=-1;
+
+    line.split('').map((c,i) => {
+        if (markerPosition == -1 && i>markerLength-2 && checkUnique(line.substring(i-markerLength+1,i+1))) {
+            markerPosition = i+1;
+            marker = line.substring(i-markerLength+1,i+1);
+        }
+    })
+
+    console.log(`marker ${marker} position is ${markerPosition}`)
 }
 
 function checkUnique(s) {
