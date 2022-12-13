@@ -14,7 +14,7 @@ fs.readFile(file, function(err, input) {
     if (err) throw err;
 
     let data = parseInput(input);
-    console.log(JSON.stringify(data, null, 2));
+    //console.log(JSON.stringify(data, null, 2));
     part1(data);
 
     part2(data);
@@ -24,7 +24,6 @@ function part1(data) {
     console.log(`Processing Part 1`)
     let total = 0;
     data.forEach((line,index) => {
-        console.log(index, line);
         let c = compare(line.left,line.right)
 
         if (c == 'right') {
@@ -68,8 +67,8 @@ function part2(data) {
         }
     })
 
-    console.log(packets);
-    console.log(`The product of the indexes of the distress packets is ${p2*p6});
+    //console.log(packets);
+    console.log(`The product of the indexes of the distress packets is ${p2*p6}`);
 }
 
 function compare(a, b) {
@@ -84,10 +83,10 @@ function compare(a, b) {
     }
     else {
         if (typeof(a) == 'number') {
-            return compare([a],b,list)
+            return compare([a],b)
         }
         else if (typeof(b) == 'number') {
-            return compare(a,[b],list)
+            return compare(a,[b])
         }
         else {
             for (let i = 0;i<a.length||i<b.length;i++) {
