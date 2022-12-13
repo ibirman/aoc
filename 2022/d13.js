@@ -10,7 +10,6 @@ const defaultDataFile = argv.$0.replace(/\.js$/, '.txt')
 const file = argv._[0] ?? defaultDataFile;
 const data = argv._[1] ?? '';
 
-
 fs.readFile(file, function(err, input) {
     if (err) throw err;
 
@@ -26,61 +25,14 @@ function part1(data) {
     let total = 0;
     data.forEach((line,index) => {
         console.log(index, line);
-        let list = [];
-        let c = compare(line.left,line.right,list)
+        let c = compare(line.left,line.right)
+
         if (c == 'right') {
             total += index + 1;
         }
     })
 
     console.log(`Sum of indexes is ${total}`);
-}
-
-function compare(a, b, list) {
-    console.log(`Compare ${a} vs ${b}`);
-
-    if (typeof(a) == 'number' && typeof(b) == 'number') {
-        if (a > b) {
-            list.push('left');
-            return 'left';
-        }
-        if (b > a) {
-            list.push('right');
-            return 'right';
-        }
-        list.push('equal');
-        return 'equal';
-    }
-    else {
-        if (typeof(a) == 'number') {
-            return compare([a],b,list)
-        }
-        else if (typeof(b) == 'number') {
-            return compare(a,[b],list)
-        }
-        else {
-            for (let i = 0;i<a.length||i<b.length;i++) {
-                if (a[i]==undefined) {
-                    list.push('right');
-                    return 'right'
-                }
-                if (b[i]==undefined) {
-                    list.push('left');
-                    return 'left'
-                }
-
-                let c = compare(a[i],b[i],list);
-
-                if (c != 'equal') {
-                    list.push(c);
-                    return c;
-                }
-            }
-            list.push('equal')
-            return 'equal'
-        }
-    }
-
 }
 
 function part2(data) {
@@ -92,8 +44,7 @@ function part2(data) {
     });
 
     packets.sort((a,b) => {
-        let l = [];
-        let c = compare(a,b,l)
+        let c = compare(a,b)
         if (c == 'left') {
             return 1;
         }
@@ -117,8 +68,45 @@ function part2(data) {
         }
     })
 
-    console.log(packets.map(p => p.toString()));
-    console.log(p2*p6)
+    console.log(packets);
+    console.log(`The product of the indexes of the distress packets is ${p2*p6});
+}
+
+function compare(a, b) {
+    if (typeof(a) == 'number' && typeof(b) == 'number') {
+        if (a > b) {
+            return 'left';
+        }
+        if (b > a) {
+            return 'right';
+        }
+        return 'equal';
+    }
+    else {
+        if (typeof(a) == 'number') {
+            return compare([a],b,list)
+        }
+        else if (typeof(b) == 'number') {
+            return compare(a,[b],list)
+        }
+        else {
+            for (let i = 0;i<a.length||i<b.length;i++) {
+                if (a[i]==undefined) {
+                    return 'right'
+                }
+                if (b[i]==undefined) {
+                    return 'left'
+                }
+
+                let c = compare(a[i],b[i]);
+
+                if (c != 'equal') {
+                    return c;
+                }
+            }
+            return 'equal'
+        }
+    }
 }
 
 function parseInput(input) {
