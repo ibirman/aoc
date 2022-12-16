@@ -1,8 +1,6 @@
 const fs = require('fs');
 const yargs = require('yargs');
 const argv = yargs.argv;
-const _ = require('underscore');
-const { map } = require('underscore');
 
 console.log(argv);
 
@@ -44,13 +42,7 @@ function part2(data) {
 
     packets.sort((a,b) => {
         let c = compare(a,b)
-        if (c == 'left') {
-            return 1;
-        }
-        if (c == 'right') {
-            return -1;
-        }
-        return 0;
+        return c == 'left' ? 1 : c == 'right' ? -1 : 0;
     });
 
     let p2=0;
@@ -73,38 +65,30 @@ function part2(data) {
 
 function compare(a, b) {
     if (typeof(a) == 'number' && typeof(b) == 'number') {
-        if (a > b) {
-            return 'left';
-        }
-        if (b > a) {
-            return 'right';
-        }
-        return 'equal';
+        return a > b ? 'left' : b > a ? 'right' : 'equal';
+    }
+    else if (typeof(a) == 'number') {
+        return compare([a],b)
+    }
+    else if (typeof(b) == 'number') {
+        return compare(a,[b])
     }
     else {
-        if (typeof(a) == 'number') {
-            return compare([a],b)
-        }
-        else if (typeof(b) == 'number') {
-            return compare(a,[b])
-        }
-        else {
-            for (let i = 0;i<a.length||i<b.length;i++) {
-                if (a[i]==undefined) {
-                    return 'right'
-                }
-                if (b[i]==undefined) {
-                    return 'left'
-                }
-
-                let c = compare(a[i],b[i]);
-
-                if (c != 'equal') {
-                    return c;
-                }
+        for (let i = 0;i<a.length||i<b.length;i++) {
+            if (a[i]==undefined) {
+                return 'right'
             }
-            return 'equal'
+            if (b[i]==undefined) {
+                return 'left'
+            }
+
+            let c = compare(a[i],b[i]);
+
+            if (c != 'equal') {
+                return c;
+            }
         }
+        return 'equal'
     }
 }
 
