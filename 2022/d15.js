@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { reduce } = require('underscore');
 const yargs = require('yargs');
 const argv = yargs.argv;
 
@@ -28,7 +29,7 @@ function part1(data, r) {
     const minY = mm.min;
     const maxY = mm.max;
 
-    console.log(minX,minY,maxX,maxY)
+    console.log(minX, minY, maxX, maxY)
 
     data.grid = [];
     data.blanks = {}
@@ -104,32 +105,44 @@ function part2(data) {
     const minY = mm.min;
     const maxY = mm.max;
 
-    console.log(minX,minY,maxX,maxY)
+    console.log(minX, minY, maxX, maxY)
 
-    for (let y = 0;y<4000000;y++) {
-        if (y%1000 == 0) console.log(`${new Date()} Checking row ${y}`)
+    for (let y = 0; y < 4000000; y++) {
+        let range = []
+        data.sensors.forEach(s => {
+            if (y >= s.sensor[1] - s.distance && y <= s.sensor[1] + s.distance) {
+                range.push([s.sensor[0] - s.distance + Math.abs(s.sensor[1] - y), s.sensor[0] + s.distance - Math.abs(s.sensor[1] - y)]);
+            }
+        })
+        let r2 = [];
+        let x1 = 0;
+        let x2 = 0;
 
-        for (let x=0;x<4000000;x++) {
-            for (let i = 0;i<data.sensors.length;i++) {
-                let s = data.sensors[i];
-                if (getRectilinearDistance([x,y],s.sensor) <= s.distance) {
-                    found = true;
-                    break;
+        if (range.length == 0) continue;
+
+        range.sort((a, b) => a[0] - b[0]);
+        x1 = range[0][0];
+        x2 = range[0][1];
+
+        range.forEach(r => {
+            if (r[0] > x2+1) {
+                r2.push([x1, x2]);
+                console.log(`Beacon at ${x2+1},${y} = ${BigInt(x2+1)*BigInt(4000000)+BigInt(y)}`);
+                x1 = r[0];
+                x2 = r[1];
+            }
+            else {
+                if (r[1] > x2) {
+                    x2 = r[1]
                 }
             }
-            if (!found) {
-                console.log(`Beacon at ${x},${y} = ${BigInt(x)*BigInt(4000000)+BigInt(y)}`);
-            }
+        })
+        r2.push([x1, x2])
+        if (r2.length>1) {
+            console.log(y, range, r2);
         }
+        //console.log(y,range,'r2',r2)
     }
-
-    data.grid.forEach((l,i) => {
-        let y = i+minY;
-        let x = l.indexOf('.')
-        if (l.indexOf('.') > 0 && y>=0 && y<=20 && x<l.length && l[x+1]=='#') {
-            console.log(l, i, l.indexOf('.'), BigInt(x+minX)*BigInt(4000000)+BigInt(y));
-        }
-    })
 }
 
 function getMinMax(sensors, o) {
@@ -180,6 +193,7 @@ function parseInput(input) {
             s.dx = Math.abs(s.sensor[0] - s.beacon[0]);
             s.dy = Math.abs(s.sensor[1] - s.beacon[1]);
             s.distance = getRectilinearDistance(s.sensor, s.beacon);
+            s.box = { l1: [s.sensor[0] - s.distance, s.sensor[1]], l2: [s.sensor[0], s.sensor[1] - s.distance], l3: [s.sensor[0] + s.distance, s.sensor[1]], l4: [s.sensor[0], s.sensor[1] + s.distance] }
 
             data.sensors.push(s);
         }
