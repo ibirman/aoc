@@ -1,8 +1,6 @@
 const fs = require('fs');
 const yargs = require('yargs');
 const argv = yargs.argv;
-const _ = require('underscore');
-const { map } = require('underscore');
 
 console.log(argv);
 
